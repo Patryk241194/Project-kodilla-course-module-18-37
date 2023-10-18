@@ -4,6 +4,8 @@ import com.crud.tasks.domain.TrelloBoardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,16 +24,24 @@ public class TrelloClient {
     private String trelloAppKey;
     @Value("${trello.app.token}")
     private String trelloToken;
+    @Value("${trello.username}")
+    private String trelloUsername;
 
-
-    public List<TrelloBoardDto> getTrelloBoards() {
-        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/username/boards")
-                .queryParam("key", trelloAppKey)
-                .queryParam("token", trelloToken)
-                .queryParam("fields", "name,id")
+    private URI buildTrelloApiUrl(String path, MultiValueMap<String, String> queryParams) {
+        return UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + path)
+                .queryParams(queryParams)
                 .build()
                 .encode()
                 .toUri();
+    }
+
+    public List<TrelloBoardDto> getTrelloBoards() {
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("key", trelloAppKey);
+        queryParams.add("token", trelloToken);
+        queryParams.add("fields", "name,id");
+
+        URI url = buildTrelloApiUrl("/members/" + trelloUsername + "/boards", queryParams);
 
         TrelloBoardDto[] boardsResponse = restTemplate.getForObject(url, TrelloBoardDto[].class);
 
