@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("v1/tasks")
-@CrossOrigin(origins = "https://patryk241194.github.io")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class TaskController {
 
