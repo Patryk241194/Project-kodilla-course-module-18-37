@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "https://patryk241194.github.io")
 @RestController
 @RequestMapping("v1/tasks")
 @RequiredArgsConstructor
