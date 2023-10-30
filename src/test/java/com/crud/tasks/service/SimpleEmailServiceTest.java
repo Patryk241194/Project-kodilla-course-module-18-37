@@ -35,9 +35,7 @@ class SimpleEmailServiceTest {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
-        if (Optional.ofNullable(mail.getToCc()).isPresent()) {
-            mailMessage.setCc(mail.getToCc());
-        }
+        Optional.ofNullable(mail.getToCc()).ifPresent(mailMessage::setCc);
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
 
@@ -59,9 +57,7 @@ class SimpleEmailServiceTest {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
-        if (Optional.ofNullable(mail.getToCc()).isPresent()) {
-            mailMessage.setCc(mail.getToCc());
-        }
+        Optional.ofNullable(mail.getToCc()).ifPresent(mailMessage::setCc);
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
 
