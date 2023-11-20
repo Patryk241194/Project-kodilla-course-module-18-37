@@ -31,6 +31,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j:8.0.33'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "com.google.code.gson:gson"
 //	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
