@@ -1,9 +1,6 @@
 package com.crud.tasks.trello.facade;
 
-import com.crud.tasks.domain.TrelloBoard;
-import com.crud.tasks.domain.TrelloBoardDto;
-import com.crud.tasks.domain.TrelloList;
-import com.crud.tasks.domain.TrelloListDto;
+import com.crud.tasks.domain.*;
 import com.crud.tasks.mapper.TrelloMapper;
 import com.crud.tasks.service.TrelloService;
 import com.crud.tasks.trello.validator.TrelloValidator;
@@ -11,13 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TrelloFacadeTest {
@@ -100,5 +100,29 @@ class TrelloFacadeTest {
 
     }
 
+    @Test
+    void createCard() {
+        // Given
+        TrelloCardDto trelloCardDto = new TrelloCardDto("TestCard", "TestDescription", "top", "1");
+        TrelloCard trelloCard = new TrelloCard("TestCard", "TestDescription", "top", "1");
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto("testId", "TestCard", "http://test-url.com");
 
+        when(trelloMapper.mapToCard(trelloCardDto)).thenReturn(trelloCard);
+        when(trelloMapper.mapToCardDto(trelloCard)).thenReturn(trelloCardDto);
+        when(trelloService.createTrelloCard(trelloCardDto)).thenReturn(createdTrelloCardDto);
+
+        // When
+        CreatedTrelloCardDto newCard = trelloFacade.createCard(trelloCardDto);
+
+        // Then
+        assertNotNull(newCard);
+        assertEquals("testId", newCard.getId());
+        assertEquals("TestCard", newCard.getName());
+        assertEquals("http://test-url.com", newCard.getShortUrl());
+
+        verify(trelloMapper, times(1)).mapToCard(trelloCardDto);
+        verify(trelloValidator, times(1)).validateCard(trelloCard);
+        verify(trelloMapper, times(1)).mapToCardDto(trelloCard);
+        verify(trelloService, times(1)).createTrelloCard(trelloCardDto);
+    }
 }
