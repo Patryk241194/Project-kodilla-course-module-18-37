@@ -15,12 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringJUnitWebConfig
 @WebMvcTest(TaskController.class)
@@ -126,6 +124,18 @@ class TaskControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(service, times(1)).deleteTask(eq(taskId));
+    }
+
+    @Test
+    void shouldHandleTaskNotFoundException() throws Exception {
+        // Given
+        Long taskId = 1L;
+
+        // When & Then
+        mockMvc.perform(get("/v1/tasks/{taskId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Task with given id doesn't exist"));
     }
 
 }

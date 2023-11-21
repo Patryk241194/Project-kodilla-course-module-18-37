@@ -11,6 +11,6 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<Object> handleTaskNotFoundExpection(TaskNotFoundException taskNotFoundException) {
-        return new ResponseEntity<>("Task with given id doesn't exist", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Task with given id doesn't exist", HttpStatus.NOT_FOUND);
     }
 }
