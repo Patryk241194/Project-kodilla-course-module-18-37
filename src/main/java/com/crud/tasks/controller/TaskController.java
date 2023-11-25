@@ -5,12 +5,14 @@ import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("v1/tasks")
 @CrossOrigin("*")
@@ -28,11 +30,17 @@ public class TaskController {
 
     @GetMapping(value = "{taskId}")
     public ResponseEntity<TaskDto> getTask(@PathVariable Long taskId) throws TaskNotFoundException {
-        return ResponseEntity.ok(taskMapper.mapToTaskDto(service.getTask(taskId)));
+        log.info("Fetching task with id: {}", taskId);
+        Task task = service.getTask(taskId);
+        if (task == null) {
+            throw new TaskNotFoundException();
+        }
+        return ResponseEntity.ok(taskMapper.mapToTaskDto(task));
     }
 
     @DeleteMapping(value = "{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) throws TaskNotFoundException {
+        log.info("Deleting task with id: {}", taskId);
         service.deleteTask(taskId);
         return ResponseEntity.noContent().build();
     }
