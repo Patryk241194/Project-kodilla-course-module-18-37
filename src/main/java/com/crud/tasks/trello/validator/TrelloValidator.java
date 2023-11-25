@@ -15,7 +15,7 @@ public class TrelloValidator {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloValidator.class);
 
     public void validateCard(final TrelloCard trelloCard) {
-        if (trelloCard.getName().contains("test")) {
+        if (trelloCard.getName().toLowerCase().contains("test")) {
             LOGGER.info("Someone is testing my application!");
         } else {
             LOGGER.info("Seems that my application is used in proper way.");
@@ -25,7 +25,7 @@ public class TrelloValidator {
     public List<TrelloBoard> validateTrelloBoards(List<TrelloBoard> trelloBoards) {
         LOGGER.info("Starting filtering boards...");
         List<TrelloBoard> filteredBoards = trelloBoards.stream()
-                .filter(trelloBoard -> !trelloBoard.getName().equalsIgnoreCase("test"))
+                .filter(trelloBoard -> !trelloBoard.getName().toLowerCase().contains("test"))
                 .collect(Collectors.toList());
         LOGGER.info("Boards have been filtered. Current list size: " + filteredBoards.size());
         return filteredBoards;
