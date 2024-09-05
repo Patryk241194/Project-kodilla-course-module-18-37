@@ -35,6 +35,8 @@ public class MailCreatorService {
         context.setVariable("tasks_url", "https://patryk241194.github.io/");
         context.setVariable("button", "Visit website");
         context.setVariable("admin_name", adminConfig.getAdminName());
+        context.setVariable("show_button", false);
+        context.setVariable("is_friend", true);
         context.setVariable("company_name", companyName);
         context.setVariable("company_goal", companyGoal);
         context.setVariable("company_email", companyEmail);
